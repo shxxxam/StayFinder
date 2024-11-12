@@ -22,7 +22,7 @@ const RoomSearch = ({ handleSearchResult }) => {
     fetchRoomTypes();
   }, []);
 
-  /**This methods is going to be used to show errors */
+  // Error handling
   const showError = (message, timeout = 5000) => {
     setError(message);
     setTimeout(() => {
@@ -30,73 +30,83 @@ const RoomSearch = ({ handleSearchResult }) => {
     }, timeout);
   };
 
-  /**THis is going to be used to fetch avaailabe rooms from database base on seach data that'll be passed in */
   const handleInternalSearch = async () => {
     if (!startDate || !endDate || !roomType) {
       showError('Please select all fields');
       return false;
     }
     try {
-      // Convert startDate to the desired format
       const formattedStartDate = startDate ? startDate.toISOString().split('T')[0] : null;
       const formattedEndDate = endDate ? endDate.toISOString().split('T')[0] : null;
-      // Call the API to fetch available rooms
       const response = await ApiService.getAvailableRoomsByDateAndType(formattedStartDate, formattedEndDate, roomType);
 
-      // Check if the response is successful
       if (response.statusCode === 200) {
         if (response.roomList.length === 0) {
-          showError('Room not currently available for this date range on the selected rom type.');
-          return
+          showError('Room not currently available for this date range on the selected room type.');
+          return;
         }
         handleSearchResult(response.roomList);
         setError('');
       }
     } catch (error) {
-      showError("Unown error occured: " + error.response.data.message);
+      showError("Unknown error occurred: " + error.response.data.message);
     }
   };
 
   return (
-    <section>
-      <div className="search-container">
-        <div className="search-field">
-          <label>Check-in Date</label>
+    <section className="bg-white p-8 rounded-lg shadow-md my-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex flex-col">
+          <label className="font-medium text-gray-700 mb-2">Check-in Date</label>
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select Check-in Date"
+            className="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
         </div>
-        <div className="search-field">
-          <label>Check-out Date</label>
+        <div className="flex flex-col">
+          <label className="font-medium text-gray-700 mb-2">Check-out Date</label>
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             dateFormat="dd/MM/yyyy"
             placeholderText="Select Check-out Date"
+            className="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
         </div>
-
-        <div className="search-field">
-          <label>Room Type</label>
-          <select value={roomType} onChange={(e) => setRoomType(e.target.value)}>
+        <div className="flex flex-col">
+          <label className="font-medium text-gray-700 mb-2">Room Type</label>
+          <select
+            value={roomType}
+            onChange={(e) => setRoomType(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          >
             <option disabled value="">
               Select Room Type
             </option>
-            {roomTypes.map((roomType) => (
-              <option key={roomType} value={roomType}>
-                {roomType}
+            {roomTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
               </option>
             ))}
           </select>
         </div>
-        <button className="home-search-button" onClick={handleInternalSearch}>
-          Search Rooms
-        </button>
+        <div className="flex items-end">
+          <button
+            onClick={handleInternalSearch}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
+          >
+            Search Rooms
+          </button>
+        </div>
       </div>
-      {error && <p className="error-message">{error}</p>}
+      {error && (
+        <p className="mt-4 text-red-600 font-medium text-sm text-center">
+          {error}
+        </p>
+      )}
     </section>
   );
 };

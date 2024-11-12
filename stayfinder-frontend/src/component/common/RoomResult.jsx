@@ -5,35 +5,34 @@ import ApiService from "../../service/ApiService";
 const RoomResult = ({ roomSearchResults }) => {
   const navigate = useNavigate(); // Initialize useNavigate hook
   const isAdmin = ApiService.isAdmin();
+
   return (
-    <section className="room-results">
+    <section className="px-4 py-4 bg-gray-50">
       {roomSearchResults && roomSearchResults.length > 0 && (
-        <div className="room-list">
+        <div className="space-y-4">
           {roomSearchResults.map((room) => (
-            <div key={room.id} className="room-list-item">
-              {/* <img
-                className="room-list-item-image"
-                src={room.roomPhotoUrl}
-                alt={room.roomType}
-              /> */}
-              <div className="room-details">
-                <h3>{room.roomType}</h3>
-                <p>Price: ${room.roomPrice} / night</p>
-                <p>Description: {room.roomDescription}</p>
+            <div
+              key={room.id}
+              className="bg-white shadow-md rounded-md p-4 flex justify-between items-center"
+            >
+              <div className="flex flex-col">
+                <h3 className="text-lg font-semibold text-gray-800">{room.roomType}</h3>
+                <p className="text-gray-600">Price: ${room.roomPrice} / night</p>
+                <p className="text-gray-500 text-sm">{room.roomDescription}</p>
               </div>
 
-              <div className="book-now-div">
+              <div className="ml-4">
                 {isAdmin ? (
                   <button
-                    className="edit-room-button"
-                    onClick={() => navigate(`/admin/edit-room/${room.id}`)} // Navigate to edit room with room ID
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+                    onClick={() => navigate(`/admin/edit-room/${room.id}`)}
                   >
                     Edit Room
                   </button>
                 ) : (
                   <button
-                    className="book-now-button"
-                    onClick={() => navigate(`/room-details-book/${room.id}`)} // Navigate to book room with room ID
+                    className="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition duration-200"
+                    onClick={() => navigate(`/room-details-book/${room.id}`)}
                   >
                     View/Book Now
                   </button>

@@ -22,10 +22,7 @@ function RegisterPage() {
 
   const validateForm = () => {
     const { name, email, password, phoneNumber } = formData;
-    if (!name || !email || !password || !phoneNumber) {
-      return false;
-    }
-    return true;
+    return name && email && password && phoneNumber;
   };
 
   const handleSubmit = async (e) => {
@@ -36,12 +33,8 @@ function RegisterPage() {
       return;
     }
     try {
-      // Call the register method from ApiService
       const response = await ApiService.registerUser(formData);
-
-      // Check if the response is successful
       if (response.statusCode === 200) {
-        // Clear the form fields after successful registration
         setFormData({
           name: "",
           email: "",
@@ -51,7 +44,7 @@ function RegisterPage() {
         setSuccessMessage("User registered successfully");
         setTimeout(() => {
           setSuccessMessage("");
-          navigate("/");
+          navigate("/login");
         }, 3000);
       }
     } catch (error) {
@@ -61,56 +54,78 @@ function RegisterPage() {
   };
 
   return (
-    <div className="auth-container">
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Phone Number:</label>
-          <input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-      <p className="register-link">
-        Already have an account? <a href="/login">Login</a>
-      </p>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-2">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 mb-7">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
+        {errorMessage && (
+          <p className="mb-4 text-red-500 text-center text-sm">{errorMessage}</p>
+        )}
+        {successMessage && (
+          <p className="mb-4 text-green-500 text-center text-sm">{successMessage}</p>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col">
+            <label htmlFor="name" className="text-gray-700 font-medium mb-2">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="email" className="text-gray-700 font-medium mb-2">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="phoneNumber" className="text-gray-700 font-medium mb-2">Phone Number:</label>
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="password" className="text-gray-700 font-medium mb-2">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Register
+          </button>
+        </form>
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <a href="/login" className="text-indigo-600 hover:underline">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

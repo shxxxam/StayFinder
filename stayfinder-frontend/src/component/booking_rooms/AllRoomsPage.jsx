@@ -4,8 +4,6 @@ import Pagination from '../common/Pagination';
 import RoomResult from '../common/RoomResult';
 import RoomSearch from '../common/RoomSearch';
 
-
-
 const AllRoomsPage = () => {
   const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -14,12 +12,10 @@ const AllRoomsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [roomsPerPage] = useState(5);
 
-  // Function to handle search results
   const handleSearchResult = (results) => {
     setRooms(results);
     setFilteredRooms(results);
   };
-
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -58,23 +54,27 @@ const AllRoomsPage = () => {
       const filtered = rooms.filter((room) => room.roomType === type);
       setFilteredRooms(filtered);
     }
-    setCurrentPage(1); // Reset to first page after filtering
+    setCurrentPage(1);
   };
 
-  // Pagination
   const indexOfLastRoom = currentPage * roomsPerPage;
   const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
   const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className='all-rooms'>
-      <h2>All Rooms</h2>
-      <div className='all-room-filter-div'>
-        <label>Filter by Room Type:</label>
-        <select value={selectedRoomType} onChange={handleRoomTypeChange}>
+    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen text-gray-800">
+      <h2 className="text-2xl font-bold mb-8 text-center text-gray-800">All Rooms</h2>
+
+      {/* Filter Section */}
+      <div className="w-full max-w-4xl mb-6 flex items-center space-x-4">
+        <label className="text-lg font-medium text-gray-700 whitespace-nowrap">Room Type:</label>
+        <select
+          value={selectedRoomType}
+          onChange={handleRoomTypeChange}
+          className="w-48 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >
           <option value="">All</option>
           {roomTypes.map((type) => (
             <option key={type} value={type}>
@@ -83,16 +83,26 @@ const AllRoomsPage = () => {
           ))}
         </select>
       </div>
-      
-      <RoomSearch handleSearchResult={handleSearchResult} />
-      <RoomResult roomSearchResults={currentRooms} />
 
-      <Pagination
-        roomsPerPage={roomsPerPage}
-        totalRooms={filteredRooms.length}
-        currentPage={currentPage}
-        paginate={paginate}
-      />
+      {/* Search Panel */}
+      <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mb-8">
+        <RoomSearch handleSearchResult={handleSearchResult} />
+      </div>
+
+      {/* Room Results */}
+      <div className="w-full max-w-5xl mb-6">
+        <RoomResult roomSearchResults={currentRooms} />
+      </div>
+
+      {/* Pagination */}
+      <div className="w-full max-w-3xl">
+        <Pagination
+          roomsPerPage={roomsPerPage}
+          totalRooms={filteredRooms.length}
+          currentPage={currentPage}
+          paginate={paginate}
+        />
+      </div>
     </div>
   );
 };
