@@ -93,6 +93,15 @@
 			<version>1.12.773</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version> <!-- Use the latest stable version -->
+		</dependency>
+
+
+
+
 	</dependencies>
 
 	<build>
