@@ -6,5 +6,5 @@ RUN mvn clean package -DskipTests
 # Run stage
 FROM openjdk:17.0.1-jdk-slim
 COPY --from=build target/StayFinder-0.0.1-SNAPSHOT.jar StayFinder.jar
-EXPOSE 8080
+EXPOSE 4040
 ENTRYPOINT ["java", "-jar", "StayFinder.jar"]
