@@ -190,4 +190,3 @@ export default class ApiService {
         return role === 'USER'
     }
 }
-// export default new ApiService();
